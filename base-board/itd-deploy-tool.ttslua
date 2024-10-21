@@ -12,6 +12,7 @@ piece_mapping = {
   ["A"] = {'ender', -90},
   [">"] = {'ender', 0},
   ["V"] = {'ender', 90},
+  ["^"] = {'ender', 270},
   ["<"] = {'ender', 180},
   ["o"] = {'objective', 0, 7},
   ["1"] = {'objective', 0, 1},

@@ -16,6 +16,7 @@ local killzone = {
       name = "1. Approved Ops",
       image = "https://steamusercontent-a.akamaihd.net/ugc/2492270022779746684/6997E45F2B72A947C34B12EC02D1CD8BF499896D/",
       deploy = "Horizontal",
+      extrabag = "2e866a",
       layout = [[
       ]],
     },
@@ -23,6 +24,7 @@ local killzone = {
       name = "2. Approved Ops",
       image = "https://steamusercontent-a.akamaihd.net/ugc/2492270022779747562/9C03B325871481A73A3EB832A7C8D9E2B3AABFA6/",
       deploy = "Horizontal",
+      extrabag = "fbd49f",
       layout = [[
       ]],
     },
@@ -30,6 +32,7 @@ local killzone = {
       name = "3. Approved Ops",
       image = "https://steamusercontent-a.akamaihd.net/ugc/2492270022779748327/6B03162E3D057EE1EB80740E696B092DA47D65DC/",
       deploy = "Horizontal",
+      extrabag = "3c76a5",
       layout = [[
       ]],
     },
@@ -37,6 +40,7 @@ local killzone = {
       name = "4. Approved Ops",
       image = "https://steamusercontent-a.akamaihd.net/ugc/2492270022779748777/44D2FE16328FFB55C2CDB3EA39FE5C34D6AED55F/",
       deploy = "Vertical",
+      extrabag = "560546",
       dz = {
         red = 6,
         blue = 6
@@ -48,6 +52,7 @@ local killzone = {
       name = "5. Approved Ops",
       image = "https://steamusercontent-a.akamaihd.net/ugc/2492270022779749292/D80154C10F4C4B65E2666FA5B06A538C93B8C941/",
       deploy = "Vertical",
+      extrabag = "ad10dc",
       dz = {
         red = 6,
         blue = 6
@@ -59,6 +64,7 @@ local killzone = {
       name = "6. Approved Ops",
       image = "https://steamusercontent-a.akamaihd.net/ugc/2492270022779749787/CF3DE4F86CD971F0F84B4DDAA81921F62B67D413/",
       deploy = "Vertical",
+      extrabag = "a25601",
       dz = {
         red = 6,
         blue = 6

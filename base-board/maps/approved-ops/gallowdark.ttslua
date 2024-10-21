@@ -93,17 +93,17 @@ local killzone = {
       deploy = "Vertical",
       layout = [[
     +   +
-    R   R
+    R   L
     + o +
-    |   |
+    L   |
   +-+-+D+-+-+
   |         R
-  + +-+o+-+ +
+  + +->o<-+ +
   L         |
   +-+-+U+-+-+
     |       R
     +   o   +
-    R       |
+    R       L
     +       +
         ]]
     }, {
@@ -113,7 +113,7 @@ local killzone = {
       layout = [[
     +   +
     R   R
-  + + o +   +
+  ^ + o +   ^
   | |   |   |
   + +D+D+D+ +
   |   |   | |
