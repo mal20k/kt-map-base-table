@@ -1,0 +1,62 @@
+function onPlayerAction(p, a, t)
+  if a == Player.Action.FlipOver then
+    for i,v in ipairs(t) do
+      local vname = v.getName()
+      if vname == "Conceal_ready" then
+        v.setState(2)
+        return true
+      elseif vname == "Conceal_activated" then
+        v.setState(1)
+        return true
+      elseif vname == "Engage_ready" then
+        v.setState(4)
+        return true
+      elseif vname == "Engage_activated" then
+        v.setState(3)
+        return true
+      end
+    end
+  end
+  if a == Player.Action.Randomize then
+    for i,v in ipairs(t) do
+      local vname = v.getName()
+      if vname == "Conceal_ready" then
+        v.setState(3)
+        return false
+      elseif vname == "Conceal_activated" then
+        v.setState(4)
+        return false
+      elseif vname == "Engage_ready" then
+        v.setState(1)
+        return false
+      elseif vname == "Engage_activated" then
+        v.setState(2)
+        return false
+      end
+    end
+  end
+  return true
+end
+
+function roundEnd(obj, color, alt_click)
+  for i,v in ipairs(getObjects()) do
+    local vname = v.getName()
+    if vname == "Conceal_activated" then
+      v.setState(1)
+    elseif vname == "Engage_activated" then
+      v.setState(3)
+    end
+  end
+end
+
+function onLoad(script_state)
+  self.createButton({
+    click_function="roundEnd",
+    function_owner=self,
+    label="Round End",
+    position={0, 0.05, 1.25},
+    width=2000,
+    height=300,
+    font_size=200
+  })
+end
