@@ -40,6 +40,20 @@ defaultSettings = [[{
       "VPs":[
         "Tac Op 1",
         "Tac Op 2"
+      ],
+      "options": [
+        "Security: Contain",
+        "Security: Take Ground",
+        "Security: Secure Center",
+        "Seek and Destroy: Overrun",
+        "Seek and Destroy: Storm Objectives",
+        "Seek and Destroy: Champion",
+        "Recon: Confirm Kill",
+        "Recon: Recover Items",
+        "Recon: Plant Beacons",
+        "Infiltration: Surveillance",
+        "Infiltration: Implant",
+        "Infiltration: Wiretap"
       ]
     },
     "killop": {
@@ -106,10 +120,6 @@ function atrName(s)
   return "kts__" .. s
 end
 
-function atrPrimary(player, rule, k)
-  return string.format("kts__primary_player%d_%d_%s", player, rule, k)
-end
-
 function atrOp(op_type, player, rule, round, k)
   return string.format("kts__%s_player%d_%d_%d_%s", op_type, player, rule, round, k)
 end
@@ -124,6 +134,10 @@ end
 
 function atrPrimaryOp(player, k)
   return string.format("kts__primaryop_player%d_%s", player, k)
+end
+
+function atrTacOp(player, k)
+  return string.format("kts__tacop_player%d_%s", player, k)
 end
 
 paramPlayer = {atrName("player1"), atrName("player2")}
@@ -306,11 +320,13 @@ function makeOpScoreTable(op_type)
     end
     opScore[k] = scoreRow
   end
-  return opScore
+  return {
+    score = opScore
+  }
 end
 
 function calculateOpScore(op_type, pl)
-  local plPrimaries = scoring[pl][op_type]
+  local plPrimaries = scoring[pl][op_type].score
   local total = 0
   local maxEach = rules.scoring[op_type].maxEach
   for k,_ in pairs(rules.scoring[op_type].VPs) do
@@ -655,7 +671,7 @@ function buildInitiativeRow(t, uy, x, y, w, h, round)
   return uy-y + h
 end
 
-function buildPrimaryRowTitle(t, uy, x, y, w, h)
+function buildRowTitle(t, titleText, uy, x, y, w, h)
   table.insert(t, {
     tag="Panel",
     attributes={
@@ -678,39 +694,7 @@ function buildPrimaryRowTitle(t, uy, x, y, w, h)
             attributes={
               class="title2"
             },
-            value="Primary Op"
-          }
-        }
-      }
-    }
-  })
-  return uy-y + h
-end
-
-function buildKillOpRowTitle(t, uy, x, y, w, h)
-  table.insert(t, {
-    tag="Panel",
-    attributes={
-      rectAlignment="UpperLeft",
-      width = w,
-      height = h,
-      offsetXY = string.format("%f %f", tostring(x), tostring(y-uy))
-    },
-    children={
-      {
-        tag="Panel",
-        attributes={
-          class="bkgPanel",
-          width=130,
-          height=h
-        },
-        children={
-          {
-            tag="Text",
-            attributes={
-              class="title2"
-            },
-            value="Kill Op"
+            value=titleText
           }
         }
       }
@@ -854,6 +838,65 @@ function optionsFor(t, def, id)
   return opt
 end
 
+function buildTacOpSelector(ch, uy, x, y, w, player, sec)
+  local h = 90
+  local dd = atrTacOp(player, "dropdown")
+  local vp = rules.packet.players[player]
+  local cch = {
+    {
+      tag="Dropdown",
+      attributes={
+        onValueChanged="onTacOpSelected",
+        id=dd,
+        rectAlignment="UpperLeft",
+        width=w,
+        height=40,
+        itemHeight=40,
+        active=true
+      },
+      children=optionsFor(rules.scoring.tacop.options, "Hidden Tac Op", dd)
+      --value="Primary Op"
+    },
+    {
+      tag="Text",
+      attributes={
+        class="title2",
+        id=atrTacOp(player, "display"),
+        rectAlignment="UpperLeft",
+        width=w,
+        height=40,
+        active=false
+      },
+      value="Hidden Tac Op"
+    },
+    {
+      tag="Button",
+      attributes={
+        id=atrTacOp(player, "button_reveal"),
+        onClick="onTacOpReveal",
+        width=w, height=40,
+        fontSize=28,
+        rectAlignment="LowerCenter",
+        offsetXY="0 4",
+        active=false,
+        visibility=vp,
+        text="Reveal"
+      }
+    }
+  }
+
+  table.insert(ch, {
+    tag="Panel",
+    attributes={
+      rectAlignment="UpperLeft",
+      width = w,
+      height = h,
+      offsetXY = string.format("%f %f", tostring(x), tostring(y-uy))
+    },
+    children=cch
+  })
+  return uy-y+h
+end
 
 function buildPrimaryOpSelector(ch, uy, x, y, w, player, sec)
   --local h = 90
@@ -1028,6 +1071,27 @@ function buildKillOpSelector(ch, uy, x, y, w, player)
   return uy-y+h
 end
 
+function buildTacOpCel(ch, uy, x, y, w, player)
+  local h = 4
+  local cch = {}
+  for i=1,1 do
+    h = buildTacOpSelector(cch, h, 4, 0, w-8, player, i) + 4
+  end
+
+  table.insert(ch, {
+    tag="Panel",
+    attributes={
+      class="bkgPanel",
+      rectAlignment="UpperLeft",
+      width = w,
+      height = h,
+      offsetXY = string.format("%f %f", tostring(x), tostring(y-uy))
+    },
+    children=cch
+  })
+  return uy-y+h
+end
+
 function buildPrimaryOpCel(ch, uy, x, y, w, player)
   local h = 4
   local cch = {}
@@ -1065,6 +1129,26 @@ function buildKillOpCel(ch, uy, x, y, w, player)
     },
     children=cch
   })
+  return uy-y+h
+end
+
+function buildTacOpRow(ch, uy, x, y, w)
+  local cch = {}
+  local celw = (w-4)/2
+  local h = buildTacOpCel(cch, 0, 0, 0, celw, 1)
+  buildTacOpCel(cch, 0, celw+4, 0, celw, 2)
+
+  table.insert(ch, {
+    tag="Panel",
+    attributes={
+      rectAlignment="UpperLeft",
+      width=w,
+      height=h,
+      offsetXY = string.format("%f %f", tostring(x), tostring(y-uy))
+    },
+    children=cch
+  })
+
   return uy-y+h
 end
 
@@ -1403,9 +1487,11 @@ function buildScoreboard(def)
     --uiHeight = buildTacOpRow(ch, uiHeight, 5, 0, uiWidth, round, 4) + 4
   end
   --ADDED by ZAKA
-  uiHeight = buildKillOpRowTitle(ch, uiHeight, 5, 0, uiWidth, 60, round, 4) + 4
+  uiHeight = buildRowTitle(ch, 'Kill Op', uiHeight, 5, 0, uiWidth, 60, round, 4) + 4
   uiHeight = buildKillOpRow(ch, uiHeight, 5, 0, uiWidth) + 4
-  uiHeight = buildPrimaryRowTitle(ch, uiHeight, 5, 0, uiWidth, 60, round, 4) + 4
+  uiHeight = buildRowTitle(ch, 'Tac Op', uiHeight, 5, 0, uiWidth, 60, round, 4) + 4
+  uiHeight = buildTacOpRow(ch, uiHeight, 5, 0, uiWidth) + 4
+  uiHeight = buildRowTitle(ch, 'Primary Op', uiHeight, 5, 0, uiWidth, 60, round, 4) + 4
   uiHeight = buildPrimaryRow(ch, uiHeight, 5, 0, uiWidth) + 4
   uiHeight = buildCritOpTotalRow(ch, uiHeight, 5, -5, uiWidth, 60) + 9
   uiHeight = buildTacOpTotalRow(ch, uiHeight, 5, -5, uiWidth, 60) + 9
@@ -2687,14 +2773,23 @@ function onLoad(state)
   loadGM()
 end
 
+function setTacOp(pl, guid)
+  local selector = atrTacOp(pl, "dropdown")
+  local display = atrTacOp(pl, "display")
+  local obj = getObjectFromGUID(guid)
+  local name = obj.getName()
+  hideUI(selector)
+
+  setUIValue(atrTacOp(pl, "streamer"), name)
+  scoring[pl].tacop.selection=name
+  scoring[pl].tacop.guid=guid
+end
+
 function setPrimaryOp(pl, guid)
   local selector = atrPrimaryOp(pl, "dropdown")
-  local display = atrPrimaryOp(pl, "display")
   local obj = getObjectFromGUID(guid)
   local name = obj.getGMNotes()
-  --setUIValue(display, name)
   hideUI(selector)
-  --showUI(display)
 
   setUIValue(atrPrimaryOp(pl, "streamer"), name)
   scoring[pl].primary.selection=name
@@ -2774,6 +2869,25 @@ function setBonusScore(pl, val)
 
   refreshBonusUI(pl)
   updateScoreUI(pl)
+end
+
+function onTacOpReveal(player, val, id)
+  local pl = string.gmatch(id, "(%d+)")()
+  pl = tonumber(pl)
+  local revealButton = atrTacOp(pl, "button_reveal")
+  local display = atrTacOp(pl, "display")
+  local obj = getObjectFromGUID(scoring[pl].tacop.guid)
+  if obj then
+    obj.rotate(Vector(180, 180, 0))
+    local name = obj.getName()
+    setUIValue(display, name)
+  end
+  hideUI(revealButton)
+  showUI(display)
+
+  setUIValue(atrTacOp(pl, "streamer"), name)
+  --scoring[pl].primary.selection=name
+  scoring[pl].tacop.revealed = true
 end
 
 function onPrimaryOpReveal(player, val, id)
@@ -2896,7 +3010,7 @@ function setOpUI(op_type, pl, rule, round, value)
 end
 
 function toggleOp(op_type, pl, rule, round)
-  local player_op_score = scoring[pl][op_type]
+  local player_op_score = scoring[pl][op_type].score
   local otherPlayer = (pl==1) and 2 or 1
   local value = not player_op_score[rule][round]
   if allowRecord(pl, value, rule) then
@@ -3057,6 +3171,18 @@ function allowRecord(pl, increase, primary)
   return true
 end
 
+function comSetSelectedTacOp(params)
+  local color = params.player
+  local guid = params.guid
+  if color and guid then
+    local p = playerNumber[color]
+    if p then
+      showUI(atrTacOp(p, "button_reveal"))
+      hideUI(atrTacOp(p, "dropdown"))
+      setTacOp(p, guid)
+    end
+  end
+end
 
 function comSetSelectedPrimaryOp(params)
   local color = params.player

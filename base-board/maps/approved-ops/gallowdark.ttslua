@@ -24,8 +24,8 @@ local killzone = {
 +-+-+D+-+U+
       |   |
    o  +   +
-      R   L
-+U+-+-+ o +-+D+
+      R   l
++U+-+-+ o +-+d+
       R   L
       +   + o
       |   |
@@ -43,11 +43,11 @@ local killzone = {
       | |
       + +  o
       R R
-   o  +-+-+U+-+
+   o  +-+-+u+-+
       L
       + o
       |
-+D+-+-+D+-+U+-+
++D+-+-+D+-+u+-+
 
       ]],
     }, {
@@ -61,11 +61,11 @@ local killzone = {
     |     R
     +  o  +
     |     |
-+U+-+ +U+-+ o
++u+-+ +U+-+ o
     L |   |
   o + +   +
     | |   R
-+U+-+D+   +-+U+
++u+-+D+   +-+U+
 
       ]],
     }, {
@@ -74,7 +74,7 @@ local killzone = {
       deploy = "Vertical",
       layout = [[
     +       +
-    R       R
+    R       r
     +   o   +
     |       |
   +-+-+U+-+-+
@@ -82,7 +82,7 @@ local killzone = {
   +    o  +
   |       |
   +-+-+D+U+-+
-  |     |   R
+  |     |   r
   +   o +   +
   R     R   |
   +     +   +
@@ -97,9 +97,9 @@ local killzone = {
     + o +
     L   |
   +-+-+D+-+-+
-  |         R
+  |         r
   + +->o<-+ +
-  L         |
+  l         |
   +-+-+U+-+-+
     |       R
     +   o   +
@@ -112,7 +112,7 @@ local killzone = {
       deploy = "Vertical",
       layout = [[
     +   +
-    R   R
+    r   r
   ^ + o +   ^
   | |   |   |
   + +D+D+D+ +

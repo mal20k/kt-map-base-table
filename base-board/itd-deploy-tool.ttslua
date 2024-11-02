@@ -9,6 +9,10 @@ piece_mapping = {
   ["R"] = {'door', 180},
   ["D"] = {'door', -90},
   ["L"] = {'door', 0},
+  ["u"] = {'door', 90},
+  ["r"] = {'door', 180},
+  ["d"] = {'door', -90},
+  ["l"] = {'door', 0},
   ["A"] = {'ender', -90},
   [">"] = {'ender', 0},
   ["V"] = {'ender', 90},
@@ -43,7 +47,7 @@ selection_guid = '9db70a'
 extrabag = nil
 extra_guids_to_track = {}
 
-function adjustPiece(object, piece, pieceCounters)
+function adjustPiece(object, piece, pieceCounters, symbol)
   if piece == 'objective' then
     pieceCounters.objectives = pieceCounters.objectives + 1
     local scale = object.getScale()
@@ -53,6 +57,9 @@ function adjustPiece(object, piece, pieceCounters)
   if piece == 'door' then
     pieceCounters.doors = pieceCounters.doors + 1
     object.setName('Hatchway Closed ' .. pieceCounters.doors)
+    if symbol == string.lower(symbol) then
+      object.setScale({-1,1,1})
+    end
   end
 end
 
@@ -167,7 +174,7 @@ function place(player, value, id)
           local bag = getObjectFromGUID('a1da2d') -- objective bag
           copy = bag.takeObject({position = position, smooth=false})
         end
-        adjustPiece(copy, piece[1], pieceCounters)
+        adjustPiece(copy, piece[1], pieceCounters, symbol)
         copy.setLock(true)
         copy.setPosition(position)
         copy.rotate({x=0,y=piece[2],z=0})

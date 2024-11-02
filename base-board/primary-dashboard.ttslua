@@ -1,18 +1,34 @@
 
 objective = "PrimaryCard"
-selected = "Selected Primary"
+selected = "Selected"
 scoreboardTag = "Kill Team Scoreboard"
 dashboardTag = "Kill Team Dashboard"
 playerName = nil
 myColor = nil
+missionType = nil
 
-function selectPrimaryMissionCard(card)
+selections = {
+  ['Primary'] = {
+    tag = 'PrimaryCard',
+    callback = 'comSetSelectedPrimaryOp',
+    announcement = ' selected a Primary Op'
+  },
+  ['Tac Op'] = {
+    tag = 'TacOp',
+    callback = 'comSetSelectedTacOp',
+    announcement = ' selected a Tac Op'
+  }
+}
+
+function selectMissionCard(card)
   local points = self.getSnapPoints()
   local npoints = #points
+  local op = selections[missionType]
   if npoints == 0 then return end
-  if not card.hasTag(selected) then
-    broadcastToAll(playerName .. " selected a primary op", Color.fromString(myColor))
-    card.addTag(selected)
+  local selectedTag = selected .. ' ' .. op.tag
+  if not card.hasTag(selectedTag) then
+    broadcastToAll(playerName .. op.announcement, Color.fromString(myColor))
+    card.addTag(selectedTag)
     card.setVelocity(Vector(0,0,0))
     card.setAngularVelocity(Vector(0,0,0))
     local cpos = card.getPosition()
@@ -30,19 +46,25 @@ function selectPrimaryMissionCard(card)
     self.setSnapPoints(points)
 
     for _,o in pairs(getObjectsWithTag(scoreboardTag)) do
-      o.call("comSetSelectedPrimaryOp",{
+      o.call(op.callback,{
         player=myColor,
         guid=card.getGUID()
       })
     end
+    local ref = card.clone()
+    Wait.frames(function()
+      broadcastToColor('A copy of ' .. ref.getName() .. ' has been sent to your hand for reference', myColor)
+      ref.deal(1, myColor)
+    end, 1)
   end
 end
 
 function onCollisionEnter(info)
+  local op = selections[missionType]
   if Player[myColor].seated then
     local o = info.collision_object
-    if o.hasTag(objective) then
-        selectPrimaryMissionCard(o)
+    if o.hasTag(op.tag) then
+        selectMissionCard(o)
     end
   end
 end
@@ -55,19 +77,21 @@ function refreshPlayerName()
   end
 end
 
-function onPlayerChangeColor(pc)
+function loadGM()
+  local gmn = self.getGMNotes()
+  local data = json.parse(gmn)
+  myColor = data.player
+  missionType = data.type
   refreshPlayerName()
+end
+
+
+function onPlayerChangeColor(pc)
+  loadGM()
 end
 
 function onPlayerDisconnect(pc)
-  refreshPlayerName()
-end
-
-function loadGM()
-  local gmn = self.getGMNotes()
-  local data = JSON.decode(gmn)
-  myColor = data.player
-  refreshPlayerName()
+  loadGM()
 end
 
 function onLoad(state)
