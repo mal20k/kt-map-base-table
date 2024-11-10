@@ -105,11 +105,11 @@ function setScriptToObject(object)
 end
 
 function onObjectLeaveContainer(container, object)
-    if (object.hasTag('KTUIToken') or object.hasTag('KT24Token')) then
+    if (object.hasTag('KTUIToken') or object.hasTag('KT24Token')) or object.hasTag('KTUIMarker') then
         if (object.hasTag('KTUITokenAdvanced')) then
             object.setScale({0.21,1,0.21})
         end
-        if object.measure_movement then    
+        if object.measure_movement or object.hasTag('KTUIMarker') then    
             setScriptToObject(object)
         end
     end
