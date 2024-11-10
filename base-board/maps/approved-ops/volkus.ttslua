@@ -14,7 +14,7 @@ local killzone = {
   maps = {
     {
       name = "1. Approved Ops",
-      image = "https://steamusercontent-a.akamaihd.net/ugc/2492270657676684128/9DCC295E8688AC21A5D33E7486C2990C5BCB7811/",
+      image = "https://steamusercontent-a.akamaihd.net/ugc/2442732965762156812/7014165745D383F7CC380CF8866876B80158E78E/",
       deploy = "Vertical",
       extrabag = "36b410",
       dz = {
