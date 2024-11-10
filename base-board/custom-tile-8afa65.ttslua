@@ -134,6 +134,10 @@ function askSpawn(args)
   spawnKill(player, number, auto)
 end
 
+function spawnKill_(args)
+  spawnKill(args.player, args.number, args.autoRoll)
+end
+
 function spawnKill(player, number, autoRoll)
   if isPlayerAllowed(player, 'spawnKill') == false then return end
   player.clearSelectedObjects()

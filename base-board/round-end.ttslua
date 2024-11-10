@@ -1,50 +1,26 @@
-function onPlayerAction(p, a, t)
-  if a == Player.Action.FlipOver then
-    for i,v in ipairs(t) do
-      local vname = v.getName()
-      if vname == "Conceal_ready" then
-        v.setState(2)
-        return true
-      elseif vname == "Conceal_activated" then
-        v.setState(1)
-        return true
-      elseif vname == "Engage_ready" then
-        v.setState(4)
-        return true
-      elseif vname == "Engage_activated" then
-        v.setState(3)
-        return true
-      end
-    end
+
+function roundEnd(player, color)
+  local extender = getObjectFromGUID('7d5c6e')
+  -- onClick and click_function have different arguments
+  -- player is not serializable and cannot be sent in a call function
+  -- sending Player[color] instead
+  extender.call("ReadyAllOperatives", Player[color])
+  extender.call("SaveAllPositions", Player[color])
+  for _,m in pairs(getObjectsWithTag('KT_Ploy_Holders')) do
+    m.call('onDeactivateClick')
   end
-  if a == Player.Action.Randomize then
-    for i,v in ipairs(t) do
-      local vname = v.getName()
-      if vname == "Conceal_ready" then
-        v.setState(3)
-        return false
-      elseif vname == "Conceal_activated" then
-        v.setState(4)
-        return false
-      elseif vname == "Engage_ready" then
-        v.setState(1)
-        return false
-      elseif vname == "Engage_activated" then
-        v.setState(2)
-        return false
-      end
-    end
-  end
-  return true
+  local roller = getObjectFromGUID('8afa65')
+  roller.call('spawnKill_',{player=Player['blue'], number=1, autoRoll=false})
+  roller.call('spawnKill_',{player=Player['red'], number=1, autoRoll=false})
+  detectStuff()
 end
 
-function roundEnd(obj, color, alt_click)
-  for i,v in ipairs(getObjects()) do
-    local vname = v.getName()
-    if vname == "Conceal_activated" then
-      v.setState(1)
-    elseif vname == "Engage_activated" then
-      v.setState(3)
+function detectStuff()
+  local zoneObj = getObjectFromGUID('367e50').getObjects()
+  for _,m in pairs(zoneObj) do
+    local name = m.getName()
+    if name == 'Smoke grenade' then
+      broadcastToAll('Smoke grenade detected, please roll 1D3 before rolling for initiative')
     end
   end
 end
