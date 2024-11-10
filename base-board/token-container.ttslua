@@ -1,17 +1,3 @@
-local tokensToIgnore = {
-    "Injured_red",
-    "Injured_blue",
-    "Minus_1_red",
-    "Minus_1_blue",
-    "Plus_1_red",
-    "Plus_1_blue"
-}
-
-function utils_Set(list)
-    local set = {}
-    for _, l in ipairs(list) do set[l] = true end
-    return set
-end
 
 function setScriptToObject(object)
      -- 20mm tokens for KT24
@@ -118,14 +104,14 @@ function setScriptToObject(object)
         ]])
 end
 
-local _tokensToIgnore = utils_Set(tokensToIgnore)
-
 function onObjectLeaveContainer(container, object)
-    if (object.hasTag('KTUIToken') or object.hasTag('KT24Token')) and not _tokensToIgnore[object.getName()] then
+    if (object.hasTag('KTUIToken') or object.hasTag('KT24Token')) then
         if (object.hasTag('KTUITokenAdvanced')) then
             object.setScale({0.21,1,0.21})
         end
-        setScriptToObject(object)
+        if object.measure_movement then    
+            setScriptToObject(object)
+        end
     end
     if object.hasTag('KT_Objective') and object.getLuaScript() == "" then
         object.setLuaScript([[
