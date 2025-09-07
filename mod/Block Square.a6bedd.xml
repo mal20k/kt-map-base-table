@@ -1,0 +1,20 @@
+<Panel height="300" width="330" position="0 -400 0" scale="10 10 10" color="rgba(0,0,255,0.3)">
+    <Panel rectAlignment="UpperCenter" height="25" width="330" color="rgba(0,0,255,0.0)">
+      <VerticalLayout >
+        <Text alignment="MiddleCenter" color="#cccccc" fontStyle="BoldAndItalic">Active Ploys</Text>
+      </VerticalLayout>
+    </Panel>
+    <Panel height="270" width="330" color="rgba(0,0,255,0.0)">
+      <VerticalLayout>
+        <Text alignment="MiddleCenter" color="#cccccc" id="ktw__activeSecondaries_player21"></Text>
+        <Text alignment="MiddleCenter" color="#cccccc" id="ktw__activeSecondaries_player22"></Text>
+        <Text alignment="MiddleCenter" color="#cccccc" id="ktw__activeSecondaries_player23"></Text>
+        <Text alignment="MiddleCenter" color="#cccccc" id="ktw__activeSecondaries_player24"></Text>
+        <Text alignment="MiddleCenter" color="#cccccc" id="ktw__activeSecondaries_player25"></Text>
+        <Text alignment="MiddleCenter" color="#cccccc" id="ktw__activeSecondaries_player26"></Text>
+        <Text alignment="MiddleCenter" color="#cccccc" id="ktw__activeSecondaries_player27"></Text>
+        <Text alignment="MiddleCenter" color="#cccccc" id="ktw__activeSecondaries_player28"></Text>
+        <Text alignment="MiddleCenter" color="#cccccc" id="ktw__activeSecondaries_player29"></Text>
+      </VerticalLayout>
+    </Panel>
+</Panel>

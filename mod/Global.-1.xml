@@ -1,0 +1,39 @@
+<Defaults>
+  <Button class="seater" width="550" height="300" fontSize="40" onClick="" fontStyle="Bold"/>
+  <Text class="seater" fontSize="100" color="#000000" fontStyle="Bold"/>
+</Defaults>
+
+<Panel id="seaterMain" active="true" visibility="Diamonds"
+  position="0 0 0" scale="0.5 0.5 0.5" offsetXY="0 0" color="#000000" outline="#FF5500" outlineSize="10 10">
+  <VerticalLayout>
+    <HorizontalLayout childAlignment="MiddleCenter" spacing="20" padding="20"  >
+      <Image image="primaryOn" />
+      <Text class="seater" fontSize="130" color="#FF5500" >ENTER THE KILLZONE</Text>
+      <Image image="primaryOn" />
+    </HorizontalLayout>
+
+    <Text class="seater" fontSize="45">CHOOSE YOUR SEAT</Text>
+
+    <HorizontalLayout childAlignment="MiddleCenter" spacing="20" padding="20">
+      <Button id="RedBtn"     color="Red"     class="seater" active="false" onClick="assignColor">Red Player</Button>
+      <Button id="YellowBtn"  color="Orange"  class="seater" active="false" onClick="assignColor">Yellow Player</Button>
+      <Button id="BlueBtn"    color="Blue"    class="seater" active="false" onClick="assignColor">Blue Player</Button>
+      <Button id="GreenBtn"   color="Yellow"  class="seater" active="false" onClick="assignColor">Green Player</Button>
+      <Button id="PurpleBtn"  color="Yellow"  class="seater" active="false" onClick="assignColor">Purple Player</Button>
+    </HorizontalLayout>
+
+    <HorizontalLayout childAlignment="MiddleCenter" spacing="20" padding="20">
+      <Button id="WhiteBtn"   color="White"   class="seater" active="false" onClick="assignColor">White Player</Button>
+      <Button id="BrownBtn"   color="Brown"   class="seater" active="false" onClick="assignColor">Brown Player</Button>
+      <Button id="OrangeBtn"  color="Orange"  class="seater" active="false" onClick="assignColor">Orange Player</Button>
+      <Button id="TealBtn"    color="Yellow"  class="seater" active="false" onClick="assignColor">Teal Player</Button>
+      <Button id="PinkBtn"    color="Yellow"  class="seater" active="false" onClick="assignColor">Pink Player</Button>
+    </HorizontalLayout>
+
+    <Text class="seater" fontSize="25" color="#bb0000" >No Thanks, I just came to lurk like a Genestealer</Text>
+    <VerticalLayout childAlignment="MiddleCenter" spacing="20" padding="20">
+      <Button id="GreyBtn"    color="Grey"    class="seater" active="true" onClick="assignColor">Spectator</Button>
+      <Button id="closeBtn"   color="#000000" class="seater" textColor="#aaaaaa" onClick="closeMenu">CLOSE MENU</Button>
+    </VerticalLayout>
+  </VerticalLayout>
+</Panel>

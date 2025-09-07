@@ -1,0 +1,2 @@
+
+require("base-board/scoreboard")
